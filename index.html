@@ -3,187 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>xishahuan - 哥特可爱小站</title>
-<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+<title>xishahuan.github.io</title>
 <style>
   :root {
-    --bg: #1a1625;
-    --card: #2d2438;
-    --text: #e8d8f0;
-    --accent: #c47b9e;
-    --accent2: #8b5a8c;
-    --border: #4a3a5c;
-    --shadow: 0 4px 20px rgba(0,0,0,0.5);
-    --gothic-font: 'UnifrakturMaguntia', cursive;
-    --serif-font: 'Noto Serif SC', serif;
+    --bg: #1a1a1f; --card: #25252d; --text: #e0e0e0;
+    --accent: #9b59b6; --border: #444;
   }
-  [data-theme="light"] {
-    --bg: #f5eef8;
-    --card: #fff;
-    --text: #2d2438;
-    --accent: #c47b9e;
-    --accent2: #8b5a8c;
-    --border: #d8c8e0;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--serif-font);
-    min-height: 100vh;
-    overflow-x: hidden;
-    transition: background 0.5s, color 0.5s;
-  }
-  /* 雪花画布 */
-  #snowCanvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 1; }
-  /* 布局 */
-  .container { max-width: 680px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 2; }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 20px;
-    box-shadow: var(--shadow);
-    transition: transform 0.3s, background 0.5s;
-  }
-  .card:hover { transform: translateY(-2px); }
-  .avatar {
-    width: 90px; height: 90px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 36px; cursor: pointer; margin-bottom: 16px;
-    border: 2px solid var(--border);
-    transition: transform 0.3s;
-  }
-  .avatar.bounce { animation: bounce 0.5s; }
-  @keyframes bounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
-  h1 {
-    font-family: var(--gothic-font);
-    font-size: 42px; line-height: 1.2; margin-bottom: 8px;
-    color: var(--accent);
-  }
-  .typewriter { font-size: 20px; min-height: 28px; margin-bottom: 16px; }
-  .cursor { display: inline-block; width: 2px; height: 22px; background: var(--accent); animation: blink 1s infinite; vertical-align: bottom; }
-  @keyframes blink { 0%,50%{opacity:1} 51%,100%{opacity:0} }
-  p { line-height: 1.7; margin-bottom: 12px; }
-  .clickable { color: var(--accent); cursor: pointer; text-decoration: underline; }
-  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-  .tag {
-    background: transparent; border: 1px solid var(--accent2);
-    color: var(--accent); padding: 4px 12px; border-radius: 20px;
-    font-size: 13px; cursor: pointer; transition: all 0.3s;
-    font-family: var(--gothic-font); font-size: 16px;
-  }
-  .tag:hover { background: var(--accent2); color: #fff; }
-  .list-item {
-    padding: 10px 0; border-bottom: 1px dashed var(--border);
-    cursor: pointer; transition: color 0.3s;
-  }
-  .list-item:last-child { border-bottom: none; }
-  .list-item:hover { color: var(--accent); }
-  .btn {
-    background: var(--accent); color: #fff; border: none;
-    padding: 10px 20px; border-radius: 8px; cursor: pointer;
-    font-size: 15px; margin-top: 12px; transition: 0.3s;
-    font-family: var(--gothic-font); font-size: 18px;
-  }
-  .btn:hover { background: var(--accent2); }
-  /* 弹窗 */
-  .modal-overlay {
-    display: none; position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%; background: rgba(0,0,0,0.7);
-    z-index: 100; align-items: center; justify-content: center;
-  }
-  .modal {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 12px; padding: 28px; max-width: 420px; width: 90%;
-    box-shadow: var(--shadow); position: relative;
-  }
-  .modal h3 { font-family: var(--gothic-font); color: var(--accent); margin-bottom: 12px; font-size: 28px; }
-  .close { position: absolute; top: 12px; right: 16px; cursor: pointer; font-size: 22px; }
-  /* 浮动按钮 */
-  .float-btn {
-    position: fixed; bottom: 24px; right: 24px;
-    width: 52px; height: 52px; border-radius: 50%;
-    background: var(--accent); color: #fff; font-size: 24px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; box-shadow: var(--shadow); z-index: 50;
-    transition: transform 0.3s;
-  }
-  .float-btn:hover { transform: scale(1.1); }
-  /* 主题切换 */
-  .theme-toggle {
-    position: fixed; top: 20px; right: 20px;
-    background: var(--card); border: 1px solid var(--border);
-    color: var(--text); padding: 8px 12px; border-radius: 8px;
-    cursor: pointer; z-index: 50; font-family: var(--gothic-font); font-size: 16px;
-  }
-  /* 照片墙 */
-  .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
-  .photo-grid img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; cursor: pointer; border: 1px solid var(--border); transition: transform 0.3s; }
-  .photo-grid img:hover { transform: scale(1.05); }
-  /* 火柴人 */
-  .stickman-box { text-align: center; padding: 20px; }
-  .stickman { font-size: 48px; display: inline-block; animation: walk 0.6s infinite alternate; }
-  @keyframes walk { from{transform:translateX(-10px) rotate(-5deg)} to{transform:translateX(10px) rotate(5deg)} }
-  /* 音乐提示 */
-  .music-hint { position: fixed; bottom: 80px; right: 20px; font-size: 12px; opacity: 0.6; z-index: 50; }
+  [data-theme="light"] { --bg:#fdf6f5; --card:#fff; --text:#333; --accent:#d65a9f; --border:#ddd; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family: 'Courier New', sans-serif; }
+  canvas { position:fixed; top:0; left:0; z-index:0; pointer-events:none; }
+  .container { max-width:700px; margin:40px auto; padding:20px; position:relative; z-index:1; }
+  .card { background:var(--card); padding:25px; border-radius:12px; margin-bottom:20px; border:1px solid var(--border); }
+  h1, h3 { color:var(--accent); }
+  .avatar { font-size:60px; text-align:center; cursor:pointer; }
+  .tag { display:inline-block; background:rgba(155,89,182,0.2); border:1px solid var(--accent); padding:5px 12px; border-radius:20px; margin:5px; cursor:pointer; }
+  .tag:hover { background:var(--accent); color:#fff; }
+  .list-item { padding:10px; border-bottom:1px dashed var(--border); cursor:pointer; }
+  .photo-wall { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; }
+  .photo-wall img { width:100%; height:100px; object-fit:cover; border-radius:8px; cursor:pointer; filter:grayscale(40%) sepia(20%); }
+  .photo-wall img:hover { filter:none; transform:scale(1.05); }
+  /* 固定音乐按钮 */
+  .music-btn { position:fixed; bottom:30px; right:30px; width:55px; height:55px; border-radius:50%; background:var(--accent); color:#fff; border:none; font-size:24px; cursor:pointer; z-index:999; box-shadow:0 4px 10px rgba(0,0,0,0.6); }
+  .music-btn.playing { animation: spin 4s linear infinite; }
+  @keyframes spin { 100%{transform:rotate(360deg);} }
+  .theme-btn { position:fixed; top:20px; right:20px; padding:8px 12px; background:var(--card); border:1px solid var(--border); color:var(--text); border-radius:20px; cursor:pointer; z-index:999; }
+  .stickman { font-size:48px; display:inline-block; animation:walk 1s infinite alternate; }
+  @keyframes walk { 0%{transform:translateX(-10px) rotate(-5deg);} 100%{transform:translateX(10px) rotate(5deg);} }
+  .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+  .modal { background:var(--card); padding:25px; border-radius:12px; max-width:400px; width:90%; border:1px solid var(--accent); }
+  .modal h3 { margin-top:0; }
+  .close { float:right; cursor:pointer; font-size:20px; }
 </style>
 </head>
 <body>
 <canvas id="snowCanvas"></canvas>
-<button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀️</button>
+<button class="theme-btn" onclick="toggleTheme()">🌙/☀️</button>
+
+<!-- 音乐 -->
+<audio id="bgMusic" loop src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_3f7c0b5b3c.mp3?filename=piano-sad-ambient-124632.mp3"></audio>
+<button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎹</button>
 
 <div class="container">
   <div class="card">
     <div class="avatar" onclick="avatarClick()">🦇</div>
-    <h1><span id="typeText"></span><span class="cursor"></span></h1>
-    <div class="typewriter">哥特 · 可爱 · 一点点暗黑</div>
-    <p>欢迎来到我的小角落。<span class="clickable" onclick="showModal('aboutModal')">关于我 ↗</span></p>
-    <div class="tags">
-      <span class="tag" onclick="showTag('读书')">📖 读书</span>
-      <span class="tag" onclick="showTag('听歌')">🎵 听歌</span>
-      <span class="tag" onclick="showTag('看电影')">🎬 看电影</span>
-      <span class="tag" onclick="showTag('散步')">🚶 散步</span>
-      <span class="tag" onclick="showTag('折腾')">🛠️ 折腾</span>
-      <span class="tag" onclick="showTag('发呆')">😴 发呆</span>
+    <h1 id="typeTarget"></h1>
+    <div style="text-align:center">哥特暗黑 · 可爱碎片</div>
+    <p style="text-align:center; margin-top:15px; cursor:pointer;" onclick="showModal('aboutModal')">✨ 点我看看「关于我」</p>
+  </div>
+
+  <div class="card">
+    <h3>🏷️ 标签</h3>
+    <span class="tag" onclick="showTag('读书')">读书</span>
+    <span class="tag" onclick="showTag('听歌')">听歌</span>
+    <span class="tag" onclick="showTag('看电影')">看电影</span>
+    <span class="tag" onclick="showTag('散步')">散步</span>
+    <span class="tag" onclick="showTag('折腾')">折腾</span>
+    <span class="tag" onclick="showTag('发呆')">发呆</span>
+  </div>
+
+  <div class="card">
+    <h3>📸 照片墙</h3>
+    <div class="photo-wall">
+      <img src="https://images.unsplash.com/photo-1505635552518-3448ff116af3?auto=format&fit=crop&w=300&q=80" onclick="showPhoto(this.src)">
+      <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=300&q=80" onclick="showPhoto(this.src)">
+      <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=300&q=80" onclick="showPhoto(this.src)">
     </div>
   </div>
 
   <div class="card">
-    <h3 style="font-family:var(--gothic-font);color:var(--accent);margin-bottom:12px;">最近在搞</h3>
+    <h3>📝 最近在搞</h3>
     <div class="list-item" onclick="showItem('reading')">📖 在读一本书</div>
     <div class="list-item" onclick="showItem('music')">🎵 单曲循环</div>
     <div class="list-item" onclick="showItem('web')">🛠️ 折腾个人网页</div>
-    <div class="list-item" onclick="showItem('coffee')">☕ 学做手冲咖啡</div>
+    <div class="list-item" onclick="showStickman()">🚶 火柴人走路</div>
   </div>
 
+  <!-- 留言板 (Giscus) -->
   <div class="card">
-    <h3 style="font-family:var(--gothic-font);color:var(--accent);margin-bottom:12px;">📸 照片墙</h3>
-    <div class="photo-grid">
-      <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=300&q=80" onclick="showPhoto(this.src)" alt="暗黑玫瑰">
-      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=300&q=80" onclick="showPhoto(this.src)" alt="月光">
-      <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=300&q=80" onclick="showPhoto(this.src)" alt="蝴蝶">
-      <img src="https://images.unsplash.com/photo-1604079628040-94301bb21b91?auto=format&fit=crop&w=300&q=80" onclick="showPhoto(this.src)" alt="哥特建筑">
-      <img src="https://images.unsplash.com/photo-1554907984-15263bfbb579?auto=format&fit=crop&w=300&q=80" onclick="showPhoto(this.src)" alt="暗黑少女">
-      <img src="https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?auto=format&fit=crop&w=300&q=80" onclick="showPhoto(this.src)" alt="蜡烛">
-    </div>
-  </div>
-
-  <div class="card">
-    <button class="btn" onclick="showModal('contactModal')">📮 联系方式</button>
-    <button class="btn" onclick="showModal('stickModal')" style="margin-left:8px;">🏃 火柴人走两步</button>
-  </div>
-
-  <!-- 留言板 Giscus -->
-  <div class="card">
-    <h3 style="font-family:var(--gothic-font);color:var(--accent);margin-bottom:12px;">💬 留言板</h3>
+    <h3>💬 留言板</h3>
     <script src="https://giscus.app/client.js"
         data-repo="xishahuan95-ui/xishahuan.github.io"
-        data-repo-id="R_kgDOxxxxxx"
-        data-category="General"
-        data-category-id="DIC_kwDOxxxxxx"
+        data-repo-id="R_kgDONKw1wQ"
+        data-category="Announcements"
+        data-category-id="DIC_kwDONKw1w84CpK"
         data-mapping="pathname"
         data-strict="0"
         data-reactions-enabled="1"
@@ -197,128 +99,52 @@
   </div>
 </div>
 
-<div class="float-btn" onclick="showModal('msgModal')">💬</div>
-<div class="music-hint">🎵 钢琴循环播放中（如静音请点播放）</div>
-
-<!-- 弹窗们 -->
-<div class="modal-overlay" id="aboutModal" onclick="closeOnOverlay(event,'aboutModal')">
-  <div class="modal"><span class="close" onclick="hideModal('aboutModal')">×</span>
-    <h3>关于我</h3>
-    <p>一个喜欢暗黑又舍不得可爱的普通人。白天折腾代码，晚上听钢琴，偶尔发呆。</p>
-  </div>
-</div>
-<div class="modal-overlay" id="tagModal" onclick="closeOnOverlay(event,'tagModal')">
-  <div class="modal"><span class="close" onclick="hideModal('tagModal')">×</span>
-    <h3 id="tagTitle"></h3><p id="tagContent"></p>
-  </div>
-</div>
-<div class="modal-overlay" id="itemModal" onclick="closeOnOverlay(event,'itemModal')">
-  <div class="modal"><span class="close" onclick="hideModal('itemModal')">×</span>
-    <h3 id="itemTitle"></h3><p id="itemContent"></p>
-  </div>
-</div>
-<div class="modal-overlay" id="contactModal" onclick="closeOnOverlay(event,'contactModal')">
-  <div class="modal"><span class="close" onclick="hideModal('contactModal')">×</span>
-    <h3>联系方式</h3>
-    <p>GitHub: xishahuan95-ui</p>
-    <p>Email: (留个空位～)</p>
-  </div>
-</div>
-<div class="modal-overlay" id="msgModal" onclick="closeOnOverlay(event,'msgModal')">
-  <div class="modal"><span class="close" onclick="hideModal('msgModal')">×</span>
-    <h3>嗨 👋</h3><p>欢迎留言～（下方评论区也可）</p>
-  </div>
-</div>
-<div class="modal-overlay" id="stickModal" onclick="closeOnOverlay(event,'stickModal')">
-  <div class="modal stickman-box"><span class="close" onclick="hideModal('stickModal')">×</span>
-    <h3>火柴人出没</h3>
-    <div class="stickman">🏃‍♂️</div>
-    <p>它在走，你在看。</p>
-  </div>
-</div>
-<div class="modal-overlay" id="photoModal" onclick="closeOnOverlay(event,'photoModal')">
-  <div class="modal" style="max-width:600px;"><span class="close" onclick="hideModal('photoModal')">×</span>
-    <img id="bigPhoto" style="width:100%;border-radius:8px;">
-  </div>
-</div>
-
-<!-- 背景音乐 -->
-<audio id="bgMusic" loop autoplay>
-  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8e9f3e97c.mp3" type="audio/mpeg">
-</audio>
+<!-- 弹窗 -->
+<div class="modal-overlay" id="aboutModal" onclick="closeOnOverlay(event,'aboutModal')"><div class="modal"><span class="close" onclick="hideModal('aboutModal')">×</span><h3>关于我</h3><p>哥特暗黑风 + 可爱碎片，喜欢折腾网页和钢琴曲 🦇</p></div></div>
+<div class="modal-overlay" id="tagModal" onclick="closeOnOverlay(event,'tagModal')"><div class="modal"><span class="close" onclick="hideModal('tagModal')">×</span><h3 id="tagTitle"></h3><p id="tagContent"></p></div></div>
+<div class="modal-overlay" id="itemModal" onclick="closeOnOverlay(event,'itemModal')"><div class="modal"><span class="close" onclick="hideModal('itemModal')">×</span><h3 id="itemTitle"></h3><p id="itemContent"></p></div></div>
+<div class="modal-overlay" id="photoModal" onclick="closeOnOverlay(event,'photoModal')"><div class="modal"><span class="close" onclick="hideModal('photoModal')">×</span><img id="bigPhoto" style="width:100%;border-radius:8px;"></div></div>
+<div class="modal-overlay" id="stickmanModal" onclick="closeOnOverlay(event,'stickmanModal')"><div class="modal"><span class="close" onclick="hideModal('stickmanModal')">×</span><div class="stickman">🚶</div><p>火柴人走动了！</p></div></div>
 
 <script>
-  // 打字机
-  const nameStr = "xishahuan";
-  let i = 0;
-  function type() {
-    if (i < nameStr.length) {
-      document.getElementById("typeText").textContent += nameStr.charAt(i);
-      i++; setTimeout(type, 180);
-    }
-  }
-  setTimeout(type, 500);
-
   // 雪花
-  const canvas = document.getElementById("snowCanvas");
-  const ctx = canvas.getContext("2d");
-  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-  const flakes = [];
-  for (let i=0;i<80;i++) flakes.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*3+1, d:Math.random()*1+0.5});
-  function drawSnow() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle = "rgba(200,180,220,0.7)";
-    ctx.beginPath();
-    flakes.forEach(f => {
-      ctx.moveTo(f.x,f.y); ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
-      f.y += f.d; f.x += Math.sin(f.y*0.01)*0.5;
-      if (f.y > canvas.height) { f.y = -10; f.x = Math.random()*canvas.width; }
-    });
-    ctx.fill(); requestAnimationFrame(drawSnow);
-  }
+  const canvas=document.getElementById('snowCanvas'), ctx=canvas.getContext('2d');
+  canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+  let flakes=[];
+  for(let i=0;i<100;i++) flakes.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*4+1, d:Math.random()*1+0.5});
+  function drawSnow(){ ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle='rgba(255,255,255,0.8)'; ctx.beginPath(); flakes.forEach(f=>{ ctx.moveTo(f.x,f.y); ctx.arc(f.x,f.y,f.r,0,Math.PI*2); f.y+=f.d; f.x+=Math.sin(f.y*0.01)*0.5; if(f.y>canvas.height) f.y=-10; }); ctx.fill(); requestAnimationFrame(drawSnow); }
   drawSnow();
-  window.addEventListener("resize", () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+  // 音乐控制（固定按钮 + 状态切换）
+  const music=document.getElementById('bgMusic'), btn=document.getElementById('musicBtn');
+  let isPlaying=false;
+  function toggleMusic(){
+    if(isPlaying){ music.pause(); btn.textContent='🔇'; btn.classList.remove('playing'); }
+    else { music.play().catch(()=>{}); btn.textContent='🎹'; btn.classList.add('playing'); }
+    isPlaying=!isPlaying;
+  }
+  // 尝试自动播放（部分浏览器允许）
+  document.addEventListener('DOMContentLoaded', ()=>{ music.play().then(()=>{isPlaying=true;btn.textContent='🎹';btn.classList.add('playing');}).catch(()=>{btn.textContent='🔇';}) });
+
+  // 打字机
+  const txt="xishahuan"; let i=0;
+  function type(){ if(i<txt.length){ document.getElementById('typeTarget').textContent+=txt[i++]; setTimeout(type,150); } }
+  setTimeout(type,500);
 
   // 弹窗
-  function showModal(id) { document.getElementById(id).style.display = "flex"; }
-  function hideModal(id) { document.getElementById(id).style.display = "none"; }
-  function closeOnOverlay(e, id) { if (e.target === document.getElementById(id)) hideModal(id); }
-  function showPhoto(src) { document.getElementById("bigPhoto").src = src; showModal("photoModal"); }
-
-  // 标签/列表
-  const tagInfo = {
-    '读书': { title:'📖 读书', content:'暗黑文学+治愈散文，最近在看哥特小说。' },
-    '听歌': { title:'🎵 听歌', content:'钢琴、后摇、lo-fi，循环这首背景乐。' },
-    '看电影': { title:'🎬 看电影', content:'蒂姆·波顿的暗黑童话，百看不厌。' },
-    '散步': { title:'🚶 散步', content:'夜里散步，看路灯和影子。' },
-    '折腾': { title:'🛠️ 折腾', content:'这个网站就是产物，边学边改。' },
-    '发呆': { title:'😴 发呆', content:'发呆是暗黑系必修课。' }
-  };
-  function showTag(n) { document.getElementById('tagTitle').textContent=tagInfo[n].title; document.getElementById('tagContent').textContent=tagInfo[n].content; showModal('tagModal'); }
-  const itemInfo = {
-    'reading':{title:'📖 在读',content:'一本哥特风小说，氛围感拉满。'},
-    'music':{title:'🎵 单曲循环',content:'就是背景这首钢琴，很配雪花。'},
-    'web':{title:'🛠️ 网页',content:'从零开始，加了雪花、弹窗、照片墙。'},
-    'coffee':{title:'☕ 咖啡',content:'手冲翻车中，但暗黑氛围到位。'}
-  };
-  function showItem(k) { document.getElementById('itemTitle').textContent=itemInfo[k].title; document.getElementById('itemContent').textContent=itemInfo[k].content; showModal('itemModal'); }
-
-  // 头像
-  function avatarClick() { const a=document.querySelector('.avatar'); a.classList.add('bounce'); setTimeout(()=>a.classList.remove('bounce'),500); }
-
-  // 主题切换（微调明暗）
-  let dark=true;
-  function toggleTheme() {
-    dark=!dark;
-    if(dark){ document.documentElement.removeAttribute('data-theme'); document.querySelector('[data-theme]')?.removeAttribute('data-theme'); }
-    else { document.documentElement.setAttribute('data-theme','light'); }
-  }
-
-  // ESC
-  document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.modal-overlay').forEach(m=>m.style.display='none'); });
-
-  // 音乐播放（部分浏览器需交互）
-  document.body.addEventListener('click', () => { const m=document.getElementById('bgMusic'); if(m.paused) m.play().catch(()=>{}); }, {once:true});
+  function showModal(id){ document.getElementById(id).style.display='flex'; }
+  function hideModal(id){ document.getElementById(id).style.display='none'; }
+  function closeOnOverlay(e,id){ if(e.target===document.getElementById(id)) hideModal(id); }
+  function showPhoto(s){ document.getElementById('bigPhoto').src=s; showModal('photoModal'); }
+  function showStickman(){ showModal('stickmanModal'); }
+  const tagInfo={'读书':{title:'📖 读书',content:'暗黑文学+治愈散文'},'听歌':{title:'🎵 听歌',content:'钢琴、后摇、lo-fi'},'看电影':{title:'🎬 看电影',content:'蒂姆·波顿的暗黑童话'},'散步':{title:'🚶 散步',content:'夜里散步，看路灯和影子'},'折腾':{title:'🛠️ 折腾',content:'这个网站就是产物'},'发呆':{title:'😴 发呆',content:'发呆是暗黑系必修课'}};
+  function showTag(n){ document.getElementById('tagTitle').textContent=tagInfo[n].title; document.getElementById('tagContent').textContent=tagInfo[n].content; showModal('tagModal'); }
+  const itemInfo={'reading':{title:'📖 在读',content:'一本哥特风小说'},'music':{title:'🎵 单曲循环',content:'背景这首钢琴'},'web':{title:'🛠️ 网页',content:'从零开始加雪花弹窗'},'coffee':{title:'☕ 咖啡',content:'手冲翻车中'}};
+  function showItem(k){ document.getElementById('itemTitle').textContent=itemInfo[k].title; document.getElementById('itemContent').textContent=itemInfo[k].content; showModal('itemModal'); }
+  function avatarClick(){ const a=document.querySelector('.avatar'); a.style.transform='scale(1.2)'; setTimeout(()=>a.style.transform='scale(1)',300); }
+  function toggleTheme(){ document.documentElement.getAttribute('data-theme')? document.documentElement.removeAttribute('data-theme'): document.documentElement.setAttribute('data-theme','light'); }
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySelectorAll('.modal-overlay').forEach(m=>m.style.display='none'); });
+  window.addEventListener('resize',()=>{ canvas.width=window.innerWidth; canvas.height=window.innerHeight; });
 </script>
 </body>
 </html>
