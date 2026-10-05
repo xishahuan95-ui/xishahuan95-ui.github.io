@@ -24,6 +24,11 @@
     margin-bottom: 20px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.15);
     backdrop-filter: blur(10px);
+    animation: fadeIn 0.8s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   .header {
     text-align: center;
@@ -40,6 +45,11 @@
     justify-content: center;
     font-size: 48px;
     color: white;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  .avatar:hover {
+    transform: scale(1.1) rotate(5deg);
   }
   h1 {
     font-size: 28px;
@@ -74,8 +84,14 @@
     padding-left: 0;
   }
   .section li {
-    padding: 6px 0;
+    padding: 10px 14px;
     border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background 0.2s;
+  }
+  .section li:hover {
+    background: #f8f5ff;
   }
   .section li:last-child {
     border-bottom: none;
@@ -88,9 +104,15 @@
   .tag {
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
-    padding: 6px 14px;
+    padding: 8px 16px;
     border-radius: 20px;
     font-size: 13px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    user-select: none;
+  }
+  .tag:hover {
+    transform: scale(1.08);
   }
   .links {
     display: flex;
@@ -107,6 +129,8 @@
     font-size: 14px;
     font-weight: 500;
     transition: transform 0.2s;
+    cursor: pointer;
+    border: none;
   }
   .link-btn:hover {
     transform: translateY(-2px);
@@ -125,10 +149,98 @@
     font-size: 13px;
     margin-top: 30px;
   }
+
+  /* 弹窗遮罩 */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeInOverlay 0.3s ease;
+  }
+  @keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .modal {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    animation: popIn 0.3s ease;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .modal h3 {
+    margin-bottom: 15px;
+    color: #555;
+    font-size: 20px;
+  }
+  .modal p, .modal li {
+    color: #666;
+    line-height: 1.8;
+    font-size: 15px;
+  }
+  .modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  .modal-close:hover {
+    color: #555;
+  }
+
+  /* 浮动留言按钮 */
+  .fab {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    font-size: 24px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(102,126,234,0.4);
+    z-index: 500;
+    transition: transform 0.3s;
+  }
+  .fab:hover {
+    transform: scale(1.1);
+  }
+
+  /* 头像点击特效 */
+  .bounce {
+    animation: bounce 0.5s ease;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
   @media (max-width: 600px) {
     .card { padding: 25px 20px; }
     h1 { font-size: 24px; }
     .avatar { width: 80px; height: 80px; font-size: 36px; }
+    .fab { bottom: 20px; right: 20px; width: 48px; height: 48px; font-size: 20px; }
   }
 </style>
 </head>
@@ -137,49 +249,167 @@
 
   <div class="card">
     <div class="header">
-      <div class="avatar">🌻</div>
+      <div class="avatar" onclick="avatarClick()">🌻</div>
       <h1>你的名字</h1>
       <p class="subtitle">随便写点什么的地方</p>
     </div>
 
     <div class="section">
       <h2>👋 关于我</h2>
-      <p>嗨，我是你。这里是我随便记录生活、想法和乱七八糟东西的小角落。不定时更新，随缘访问。</p>
+      <p onclick="showModal('aboutModal')" style="cursor:pointer; color:#667eea;">点击查看详细介绍 →</p>
     </div>
 
     <div class="section">
       <h2>💡 我喜欢</h2>
       <div class="tags">
-        <span class="tag">读书</span>
-        <span class="tag">听歌</span>
-        <span class="tag">看电影</span>
-        <span class="tag">散步</span>
-        <span class="tag">折腾新东西</span>
-        <span class="tag">发呆</span>
+        <span class="tag" onclick="showTag('读书')">📖 读书</span>
+        <span class="tag" onclick="showTag('听歌')">🎵 听歌</span>
+        <span class="tag" onclick="showTag('看电影')">🎬 看电影</span>
+        <span class="tag" onclick="showTag('散步')">🚶 散步</span>
+        <span class="tag" onclick="showTag('折腾新东西')">🛠️ 折腾新东西</span>
+        <span class="tag" onclick="showTag('发呆')">😴 发呆</span>
       </div>
     </div>
 
     <div class="section">
       <h2>📝 最近在搞</h2>
       <ul>
-        <li>📖 在读《XXX》</li>
-        <li>🎵 单曲循环一首歌</li>
-        <li>🛠️ 折腾个人网页（就是你现在看到的这个）</li>
-        <li>☕ 学做手冲咖啡</li>
+        <li onclick="showItem('reading')">📖 在读一本书 <span style="float:right;color:#667eea;">详情 →</span></li>
+        <li onclick="showItem('music')">🎵 单曲循环一首歌 <span style="float:right;color:#667eea;">详情 →</span></li>
+        <li onclick="showItem('web')">🛠️ 折腾个人网页 <span style="float:right;color:#667eea;">详情 →</span></li>
+        <li onclick="showItem('coffee')">☕ 学做手冲咖啡 <span style="float:right;color:#667eea;">详情 →</span></li>
       </ul>
     </div>
 
     <div class="section">
       <h2>🔗 找到我</h2>
       <div class="links">
-        <a href="#" class="link-btn link-primary">微博</a>
-        <a href="#" class="link-btn link-secondary">小红书</a>
-        <a href="#" class="link-btn link-secondary">邮箱</a>
+        <a href="#" class="link-btn link-primary" onclick="showModal('contactModal')">联系方式</a>
+        <a href="#" class="link-btn link-secondary" onclick="showModal('guestbookModal')">留言板</a>
       </div>
     </div>
   </div>
 
   <p class="footer">Made with ☕ · 2026</p>
 </div>
+
+<!-- 浮动按钮 -->
+<button class="fab" onclick="showModal('guestbookModal')" title="留言">💬</button>
+
+<!-- 弹窗们 -->
+<div class="modal-overlay" id="aboutModal" onclick="closeOnOverlay(event, 'aboutModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('aboutModal')">×</button>
+    <h3>👋 关于我</h3>
+    <p>嗨，我是你。这里是我随便记录生活、想法和乱七八糟东西的小角落。</p>
+    <br>
+    <p>目前在做的事：</p>
+    <ul>
+      <li>🎓 在读 / 工作</li>
+      <li>🌱 学新东西中</li>
+      <li>📍 坐标：某城市</li>
+      <li>🎯 目标：活得开心</li>
+    </ul>
+    <br>
+    <p>不定时更新，随缘访问 ☕</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="contactModal" onclick="closeOnOverlay(event, 'contactModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('contactModal')">×</button>
+    <h3>🔗 找到我</h3>
+    <p>📧 邮箱：your@email.com</p>
+    <br>
+    <p>🐦 微博：@你的名字</p>
+    <br>
+    <p>📕 小红书：@你的名字</p>
+    <br>
+    <p>💬 微信：your_wechat</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="guestbookModal" onclick="closeOnOverlay(event, 'guestbookModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('guestbookModal')">×</button>
+    <h3>💬 留言板</h3>
+    <p>留个言吧～（目前是静态页面，留言功能需要后端支持，后续可以加！）</p>
+    <br>
+    <p style="color:#999; font-size:13px;">💡 提示：这个弹窗只是展示效果，真正的留言板需要数据库。如果你想要，我可以教你用第三方服务（比如 Waline / Giscus）加上去。</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="tagModal" onclick="closeOnOverlay(event, 'tagModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('tagModal')">×</button>
+    <h3 id="tagTitle">标签</h3>
+    <p id="tagContent">内容</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="itemModal" onclick="closeOnOverlay(event, 'itemModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('itemModal')">×</button>
+    <h3 id="itemTitle">详情</h3>
+    <p id="itemContent">内容</p>
+  </div>
+</div>
+
+<script>
+  // 弹窗控制
+  function showModal(id) {
+    document.getElementById(id).style.display = 'flex';
+  }
+  function hideModal(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+  function closeOnOverlay(e, id) {
+    if (e.target === document.getElementById(id)) {
+      hideModal(id);
+    }
+  }
+
+  // 标签弹窗
+  const tagInfo = {
+    '读书': { title: '📖 读书', content: '最近在看小说和散文，偏爱轻松治愈类的。有推荐的话欢迎告诉我！' },
+    '听歌': { title: '🎵 听歌', content: '什么风格都听，最近循环的是 indie pop 和 lo-fi。歌荒求推荐～' },
+    '看电影': { title: '🎬 看电影', content: '喜欢科幻和文艺片，最近看了几部经典老片，还在回味。' },
+    '散步': { title: '🚶 散步', content: '每天晚饭后散步半小时，放空大脑，顺便消化。强烈推荐这个习惯。' },
+    '折腾新东西': { title: '🛠️ 折腾新东西', content: '从 AI 工具到网页开发，什么都想试试。这个网站就是折腾的产物 😄' },
+    '发呆': { title: '😴 发呆', content: '发呆是门艺术。有时候什么都不想，反而最舒服。' }
+  };
+  function showTag(name) {
+    document.getElementById('tagTitle').textContent = tagInfo[name].title;
+    document.getElementById('tagContent').textContent = tagInfo[name].content;
+    showModal('tagModal');
+  }
+
+  // 列表项弹窗
+  const itemInfo = {
+    'reading': { title: '📖 在读一本书', content: '最近在读一本关于设计和生活的书，还没看完，看完来写读后感。' },
+    'music': { title: '🎵 单曲循环', content: '最近单曲循环一首很治愈的歌，每次听心情都会变好。歌名先保密 😏' },
+    'web': { title: '🛠️ 折腾个人网页', content: '就是这个网站啦！从零开始，边学边做，还挺有意思的。' },
+    'coffee': { title: '☕ 学做手冲咖啡', content: '最近入了手冲的坑，买了个手冲壶，正在练控水。目前还翻车中 ☕' }
+  };
+  function showItem(key) {
+    document.getElementById('itemTitle').textContent = itemInfo[key].title;
+    document.getElementById('itemContent').textContent = itemInfo[key].content;
+    showModal('itemModal');
+  }
+
+  // 头像点击
+  function avatarClick() {
+    const avatar = document.querySelector('.avatar');
+    avatar.classList.add('bounce');
+    setTimeout(() => avatar.classList.remove('bounce'), 500);
+  }
+
+  // ESC 关闭弹窗
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+    }
+  });
+</script>
 </body>
 </html>
