@@ -1,625 +1,371 @@
-<!DOCTYPE html>
+Xisha<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xishahuan - Gothic Dark</title>
-  
-  <style>
-    /* ================= 字体引入 ================= */
-    @font-face {
-      font-family: 'Cinzel';
-      src: url('./fonts/Cinzel-VariableFont_wght.ttf') format('truetype');
-      font-weight: 100 900;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    /* ================= 全局样式 ================= */
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      min-height: 100vh;
-      background: #0a0a0f;
-      color: #d4d4d4;
-      font-family: 'Cinzel', serif;
-      overflow-x: hidden;
-      transition: background 0.5s ease;
-    }
-
-    body.light-mode {
-      background: #1a1a2e;
-      color: #e8d5f5;
-    }
-
-    /* ================= 蜘蛛网装饰 ================= */
-    .spiderweb {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 120px;
-      height: 120px;
-      z-index: 5;
-      pointer-events: none;
-      opacity: 0.4;
-    }
-    .spiderweb::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: 
-        radial-gradient(ellipse at top left, transparent 30%, rgba(100,100,100,0.3) 31%, rgba(100,100,100,0.3) 33%, transparent 34%),
-        radial-gradient(ellipse at top left, transparent 45%, rgba(100,100,100,0.2) 46%, rgba(100,100,100,0.2) 48%, transparent 49%),
-        radial-gradient(ellipse at top left, transparent 60%, rgba(100,100,100,0.15) 61%, rgba(100,100,100,0.15) 63%, transparent 64%);
-      clip-path: polygon(0 0, 100% 0, 0 100%);
-    }
-
-    /* ================= 主内容 ================= */
-    .content {
-      padding: 60px 20px;
-      text-align: center;
-      line-height: 2;
-      max-width: 700px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 10;
-    }
-
-    h1 {
-      font-weight: 700;
-      font-size: 38px;
-      letter-spacing: 3px;
-      margin-bottom: 10px;
-      color: #c9a0dc;
-      text-shadow: 0 0 15px rgba(201, 160, 220, 0.4);
-    }
-
-    .subtitle {
-      font-size: 14px;
-      color: #888;
-      margin-bottom: 40px;
-      letter-spacing: 1px;
-    }
-
-    .card {
-      background: rgba(30, 30, 45, 0.7);
-      border: 1px solid rgba(201, 160, 220, 0.2);
-      border-radius: 12px;
-      padding: 20px;
-      margin: 20px 0;
-      backdrop-filter: blur(5px);
-    }
-
-    .card h2 {
-      color: #e8b4f8;
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
-
-    .card p {
-      font-size: 15px;
-      color: #bbb;
-    }
-
-    /* ================= 互动按钮区 ================= */
-    .fun-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-      margin-top: 30px;
-    }
-
-    .fun-btn {
-      padding: 12px 20px;
-      border-radius: 25px;
-      border: 1px solid rgba(201, 160, 220, 0.4);
-      background: rgba(40, 30, 55, 0.8);
-      color: #d4d4d4;
-      cursor: pointer;
-      font-family: 'Cinzel', serif;
-      font-size: 14px;
-      transition: all 0.3s ease;
-    }
-
-    .fun-btn:hover {
-      background: rgba(201, 160, 220, 0.3);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(201, 160, 220, 0.2);
-    }
-
-    /* ================= 蝙蝠飞行动画 ================= */
-    .bat-container {
-      position: fixed;
-      top: 50%;
-      right: -100px;
-      z-index: 9998;
-      pointer-events: none;
-      opacity: 0;
-    }
-
-    .bat-container.fly {
-      animation: batFly 3s ease-in-out forwards;
-      opacity: 1;
-    }
-
-    @keyframes batFly {
-      0% {
-        right: -100px;
-        top: 50%;
-        transform: rotate(0deg) scale(0.6);
-        opacity: 0;
-      }
-      15% {
-        opacity: 1;
-      }
-      25% {
-        top: 35%;
-        transform: rotate(-5deg) scale(0.8);
-      }
-      50% {
-        top: 45%;
-        transform: rotate(3deg) scale(1);
-      }
-      75% {
-        top: 40%;
-        transform: rotate(-2deg) scale(0.9);
-      }
-      100% {
-        right: 110%;
-        top: 30%;
-        transform: rotate(0deg) scale(0.5);
-        opacity: 0;
-      }
-    }
-
-    .bat-svg {
-      font-size: 48px;
-      display: inline-block;
-      animation: wingFlap 0.15s ease-in-out infinite alternate;
-    }
-
-    @keyframes wingFlap {
-      0% { transform: scaleX(1); }
-      100% { transform: scaleX(-0.7); }
-    }
-
-    /* ================= 骷髅弹窗 ================= */
-    .quote-overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-      z-index: 10000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .quote-overlay.show {
-      display: flex;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .quote-box {
-      background: rgba(30, 25, 45, 0.95);
-      border: 2px solid #c9a0dc;
-      border-radius: 16px;
-      padding: 30px 40px;
-      max-width: 400px;
-      text-align: center;
-      position: relative;
-    }
-
-    .quote-box .skull {
-      font-size: 48px;
-      margin-bottom: 15px;
-    }
-
-    .quote-box p {
-      color: #e8d5f5;
-      font-size: 16px;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
-    .quote-box button {
-      padding: 8px 20px;
-      border-radius: 20px;
-      border: 1px solid #c9a0dc;
-      background: transparent;
-      color: #c9a0dc;
-      cursor: pointer;
-      font-family: 'Cinzel', serif;
-    }
-
-    .quote-box button:hover {
-      background: rgba(201, 160, 220, 0.2);
-    }
-
-    /* ================= 鼠标星星尾巴 ================= */
-    .star-trail {
-      position: fixed;
-      pointer-events: none;
-      z-index: 9997;
-      font-size: 14px;
-      animation: starFade 0.8s ease-out forwards;
-    }
-
-    @keyframes starFade {
-      0% { opacity: 1; transform: scale(1) translateY(0); }
-      100% { opacity: 0; transform: scale(0.3) translateY(-20px); }
-    }
-
-    /* ================= 音乐按钮 ================= */
-    #musicBtn {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      background: rgba(20, 20, 20, 0.85);
-      border: 1px solid rgba(255, 68, 68, 0.3);
-      cursor: pointer;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      padding: 0;
-    }
-
-    #musicBtn:hover {
-      background: rgba(40, 40, 40, 0.95);
-      transform: scale(1.1);
-    }
-
-    #musicBtn .bat { font-size: 26px; line-height: 1; }
-    #musicBtn .cross {
-      font-size: 18px;
-      position: absolute;
-      bottom: 2px; right: 2px;
-      filter: drop-shadow(0 0 2px red);
-    }
-
-    #musicBtn.playing .cross { display: none; }
-    #musicBtn.playing .bat { filter: drop-shadow(0 0 4px #ff4444); }
-
-    /* ================= 主题切换按钮 ================= */
-    #themeBtn {
-      position: fixed;
-      bottom: 90px;
-      right: 25px;
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      background: rgba(20, 20, 20, 0.85);
-      border: 1px solid rgba(201, 160, 220, 0.3);
-      cursor: pointer;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      transition: all 0.3s ease;
-    }
-
-    #themeBtn:hover {
-      transform: scale(1.1) rotate(180deg);
-    }
-
-    /* ================= 雪花 ================= */
-    #snowCanvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    /* ================= 页脚 ================= */
-    footer {
-      text-align: center;
-      padding: 30px;
-      font-size: 12px;
-      color: #555;
-      position: relative;
-      z-index: 10;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Huan Xisha - 个人小站</title>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1a1625;
+    --card: #2d2438;
+    --text: #e8d8f0;
+    --accent: #c47b9e;
+    --accent2: #8b5a8c;
+    --border: #4a3a5c;
+    --shadow: 0 4px 20px rgba(0,0,0,0.5);
+    --gothic-font: 'UnifrakturMaguntia', cursive;
+    --serif-font: 'Noto Serif SC', serif;
+  }
+  [data-theme="light"] {
+    --bg: #f5eef8;
+    --card: #fff;
+    --text: #2d2438;
+    --accent: #c47b9e;
+    --accent2: #8b5a8c;
+    --border: #d8c8e0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif-font);
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background 0.5s, color 0.5s;
+  }
+  /* 雪花画布 */
+  #snowCanvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 1; }
+  /* 布局 */
+  .container { max-width: 680px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 2; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s, background 0.5s;
+  }
+  .card:hover { transform: translateY(-2px); }
+  .avatar {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; cursor: pointer; margin-bottom: 16px;
+    border: 2px solid var(--border);
+    transition: transform 0.3s;
+  }
+  .avatar.bounce { animation: bounce 0.5s; }
+  @keyframes bounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+  h1 {
+    font-family: var(--gothic-font);
+    font-size: 42px; line-height: 1.2; margin-bottom: 8px;
+    color: var(--accent);
+  }
+  .typewriter { font-size: 20px; min-height: 28px; margin-bottom: 16px; }
+  .cursor { display: inline-block; width: 2px; height: 22px; background: var(--accent); animation: blink 1s infinite; vertical-align: bottom; }
+  @keyframes blink { 0%,50%{opacity:1} 51%,100%{opacity:0} }
+  p { line-height: 1.7; margin-bottom: 12px; }
+  .clickable { color: var(--accent); cursor: pointer; text-decoration: underline; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .tag {
+    background: transparent; border: 1px solid var(--accent2);
+    color: var(--accent); padding: 4px 12px; border-radius: 20px;
+    font-size: 13px; cursor: pointer; transition: all 0.3s;
+    font-family: var(--gothic-font); font-size: 16px;
+  }
+  .tag:hover { background: var(--accent2); color: #fff; }
+  .list-item {
+    padding: 10px 0; border-bottom: 1px dashed var(--border);
+    cursor: pointer; transition: color 0.3s;
+  }
+  .list-item:last-child { border-bottom: none; }
+  .list-item:hover { color: var(--accent); }
+  .btn {
+    background: var(--accent); color: #fff; border: none;
+    padding: 10px 20px; border-radius: 8px; cursor: pointer;
+    font-size: 15px; margin-top: 12px; transition: 0.3s;
+    font-family: var(--gothic-font); font-size: 18px;
+  }
+  .btn:hover { background: var(--accent2); }
+  /* 弹窗 */
+  .modal-overlay {
+    display: none; position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%; background: rgba(0,0,0,0.7);
+    z-index: 100; align-items: center; justify-content: center;
+  }
+  .modal {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 28px; max-width: 420px; width: 90%;
+    box-shadow: var(--shadow); position: relative;
+  }
+  .modal h3 { font-family: var(--gothic-font); color: var(--accent); margin-bottom: 12px; font-size: 28px; }
+  .close { position: absolute; top: 12px; right: 16px; cursor: pointer; font-size: 22px; }
+  /* 浮动按钮 */
+  .float-btn {
+    position: fixed; bottom: 24px; right: 24px;
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 24px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: var(--shadow); z-index: 50;
+    transition: transform 0.3s;
+  }
+  .float-btn:hover { transform: scale(1.1); }
+  /* 主题切换 */
+  .theme-toggle {
+    position: fixed; top: 20px; right: 20px;
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text); padding: 8px 12px; border-radius: 8px;
+    cursor: pointer; z-index: 50; font-family: var(--gothic-font); font-size: 16px;
+  }
+  /* 照片墙 */
+  .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+  .photo-grid img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; cursor: pointer; border: 1px solid var(--border); transition: transform 0.3s; }
+  .photo-grid img:hover { transform: scale(1.05); }
+  /* 火柴人 */
+  .stickman-box { text-align: center; padding: 20px; }
+  .stickman { font-size: 48px; display: inline-block; animation: walk 0.6s infinite alternate; }
+  @keyframes walk { from{transform:translateX(-10px) rotate(-5deg)} to{transform:translateX(10px) rotate(5deg)} }
+  /* 音乐提示 */
+  .music-hint { position: fixed; bottom: 80px; right: 20px; font-size: 12px; opacity: 0.6; z-index: 50; }
+  /* 右下角音乐按钮 */
+  #musicBtn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    z-index: 60;
+    border: 1px solid var(--border);
+    transition: transform 0.3s, background 0.3s;
+  }
+  #musicBtn:hover {
+    transform: scale(1.15);
+    background: #8b0000;
+    box-shadow: 0 0 12px rgba(139,0,0,0.8);
+  }
+</style>
 </head>
 <body>
+<canvas id="snowCanvas"></canvas>
+<button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀️</button>
 
-  <!-- 蜘蛛网 -->
-  <div class="spiderweb"></div>
-
-  <!-- 雪花画布 -->
-  <canvas id="snowCanvas"></canvas>
-
-  <!-- 主内容 -->
-  <div class="content">
-    <h1>🦇 Xishahuan 🦇</h1>
-    <p class="subtitle">~ Gothic Punk · Cute · Dark ~</p>
-
-    <div class="card">
-      <h2>关于我</h2>
-      <p>一个喜欢暗黑朋克风格但内心超可爱的灵魂 ✨<br>白天写代码，晚上数星星（和蝙蝠）。</p>
-    </div>
-
-    <div class="card">
-      <h2>我的项目</h2>
-      <p>正在建设中... 🚧<br>预计会有更多好玩的小东西出现在这里。</p>
-    </div>
-
-    <!-- 互动按钮区 -->
-    <div class="fun-buttons">
-      <button class="fun-btn" id="batBtn">🦇 召唤蝙蝠</button>
-      <button class="fun-btn" id="skullBtn">💀 朋克语录</button>
-      <button class="fun-btn" id="sparkleBtn">✨ 惊喜一下</button>
-      <button class="fun-btn" id="eggBtn">🥚 彩蛋</button>
-    </div>
-
-    <p style="margin-top: 60px; font-size: 13px; color: #666;">↓ 继续滚动测试悬浮按钮效果 ↓</p>
-    <p style="margin-top: 80vh; font-size: 13px; color: #666;">页面底部，按钮依然在右下角 ✨</p>
-  </div>
-
-  <!-- 骷髅语录弹窗 -->
-  <div class="quote-overlay" id="quoteOverlay">
-    <div class="quote-box">
-      <div class="skull">💀</div>
-      <p id="quoteText">加载中...</p>
-      <button onclick="closeQuote()">收起 ~</button>
+<div class="container">
+  <div class="card">
+    <div class="avatar" onclick="avatarClick()">🦇</div>
+    <h1><span id="typeText"></span><span class="cursor"></span></h1>
+    <div class="typewriter">哥特 · 满月 · 一点点迷迭香</div>
+    <p>欢迎来到我的小角落。<span class="clickable" onclick="showModal('aboutModal')">关于我 ↗</span></p>
+    <div class="tags">
+      <span class="tag" onclick="showTag('读书')">📖 读书</span>
+      <span class="tag" onclick="showTag('听歌')">🎵 听歌</span>
+      <span class="tag" onclick="showTag('看电影')">🎬 看电影</span>
+      <span class="tag" onclick="showTag('散步')">🚶 散步</span>
+      <span class="tag" onclick="showTag('折腾')">🛠️ 折腾</span>
+      <span class="tag" onclick="showTag('发呆')">😴 发呆</span>
     </div>
   </div>
 
-  <!-- 蝙蝠飞行容器 -->
-  <div class="bat-container" id="batContainer">
-    <span class="bat-svg">🦇</span>
+  <div class="card">
+    <h3 style="font-family:var(--gothic-font);color:var(--accent);margin-bottom:12px;">最近在搞</h3>
+    <div class="list-item" onclick="showItem('reading')">📖 在读一本书</div>
+    <div class="list-item" onclick="showItem('music')">🎵 单曲循环</div>
+    <div class="list-item" onclick="showItem('web')">🛠️ 折腾个人网页</div>
+    <div class="list-item" onclick="showItem('coffee')">☕ 学做手冲咖啡</div>
   </div>
 
-  <!-- 背景音乐 -->
-  <audio id="bgAudio" loop preload="auto">
-    <source src="./backgroundmusic/kokoro-no-tamago.mp3" type="audio/mpeg">
-  </audio>
+  <div class="card">
+    <h3 style="font-family:var(--gothic-font);color:var(--accent);margin-bottom:12px;">📸 照片墙</h3>
+    <div class="photo-grid">
+      <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=300&q=80" onclick="showPhoto(this.src)" alt="暗黑玫瑰">
+      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=300&q=80" onclick="showPhoto(this.src)" alt="月光">
+      <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=300&q=80" onclick="showPhoto(this.src)" alt="蝴蝶">
+      <img src="https://images.unsplash.com/photo-1604079628040-94301bb21b91?auto=format&fit=crop&w=300&q=80" onclick="showPhoto(this.src)" alt="哥特建筑">
+      <img src="https://images.unsplash.com/photo-1554907984-15263bfbb579?auto=format&fit=crop&w=300&q=80" onclick="showPhoto(this.src)" alt="暗黑少女">
+      <img src="https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?auto=format&fit=crop&w=300&q=80" onclick="showPhoto(this.src)" alt="蜡烛">
+    </div>
+  </div>
 
-  <!-- 音乐开关 -->
-  <button id="musicBtn" title="播放 / 暂停">
-    <span class="bat">🦇</span>
-    <span class="cross">🚫</span>
-  </button>
+  <div class="card">
+    <button class="btn" onclick="showModal('contactModal')">📮 联系方式</button>
+    <button class="btn" onclick="showModal('stickModal')" style="margin-left:8px;">🏃 火柴人走两步</button>
+  </div>
 
-  <!-- 主题切换 -->
-  <button id="themeBtn" title="切换主题">🎃</button>
+  <!-- 留言板 Giscus -->
+  <div class="card">
+    <h3 style="font-family:var(--gothic-font);color:var(--accent);margin-bottom:12px;">💬 留言板</h3>
+    <script src="https://giscus.app/client.js"
+        data-repo="xishahuan95-ui/xishahuan.github.io"
+        data-repo-id="R_kgDOxxxxxx"
+        data-category="General"
+        data-category-id="DIC_kwDOxxxxxx"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="dark"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div>
+</div>
 
-  <footer>
-    © 2026 Xishahuan · Made with 🦇 & ✨
-  </footer>
+<button id="musicBtn" title="背景音乐">🦇🚫</button>
+<div class="music-hint">🎵 音乐循环播放中（如静音请点播放）</div>
 
-  <script>
-    /* ================= 音乐控制 ================= */
-    const bgAudio = document.getElementById('bgAudio');
-    const musicBtn = document.getElementById('musicBtn');
-    let musicOn = false;
+<!-- 弹窗们 -->
+<div class="modal-overlay" id="aboutModal" onclick="closeOnOverlay(event,'aboutModal')">
+  <div class="modal"><span class="close" onclick="hideModal('aboutModal')">×</span>
+    <h3>关于我</h3>
+    <p>一个喜欢黑暗的普通人。间歇睡觉，持续发呆。</p>
+  </div>
+</div>
+<div class="modal-overlay" id="tagModal" onclick="closeOnOverlay(event,'tagModal')">
+  <div class="modal"><span class="close" onclick="hideModal('tagModal')">×</span>
+    <h3 id="tagTitle"></h3><p id="tagContent"></p>
+  </div>
+</div>
+<div class="modal-overlay" id="itemModal" onclick="closeOnOverlay(event,'itemModal')">
+  <div class="modal"><span class="close" onclick="hideModal('itemModal')">×</span>
+    <h3 id="itemTitle"></h3><p id="itemContent"></p>
+  </div>
+</div>
+<div class="modal-overlay" id="contactModal" onclick="closeOnOverlay(event,'contactModal')">
+  <div class="modal"><span class="close" onclick="hideModal('contactModal')">×</span>
+    <h3>联系方式</h3>
+    <p>GitHub: xishahuan95-ui</p>
+    <p>Email: (留个空位～)</p>
+  </div>
+</div>
+<div class="modal-overlay" id="msgModal" onclick="closeOnOverlay(event,'msgModal')">
+  <div class="modal"><span class="close" onclick="hideModal('msgModal')">×</span>
+    <h3>嗨 👋</h3><p>欢迎留言～（下方评论区也可）</p>
+  </div>
+</div>
+<div class="modal-overlay" id="stickModal" onclick="closeOnOverlay(event,'stickModal')">
+  <div class="modal stickman-box"><span class="close" onclick="hideModal('stickModal')">×</span>
+    <h3>火柴人出没</h3>
+    <div class="stickman">🏃‍♂️</div>
+    <p>它在走，你在看。</p>
+  </div>
+</div>
+<div class="modal-overlay" id="photoModal" onclick="closeOnOverlay(event,'photoModal')">
+  <div class="modal" style="max-width:600px;"><span class="close" onclick="hideModal('photoModal')">×</span>
+    <img id="bigPhoto" style="width:100%;border-radius:8px;">
+  </div>
+</div>
 
-    function toggleMusic() {
-      if (!musicOn) {
-        bgAudio.volume = 0.4;
-        bgAudio.play().then(() => {
-          musicOn = true;
-          musicBtn.classList.add('playing');
-        }).catch(err => {
-          console.log('播放被拦截，请再次点击', err);
-        });
-      } else {
-        bgAudio.pause();
-        musicOn = false;
-        musicBtn.classList.remove('playing');
-      }
+<!-- 背景音乐 -->
+<audio id="bgMusic" loop>
+  <source src="backgroundmusic/kokoro-no-tamago.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  // 打字机
+  const nameStr = "Huan Xisha";
+  let i = 0;
+  function type() {
+    if (i < nameStr.length) {
+      document.getElementById("typeText").textContent += nameStr.charAt(i);
+      i++; setTimeout(type, 180);
+    } else {
+      // 打字完成，删掉光标
+      const cursor = document.querySelector('.cursor');
+      if (cursor) cursor.remove();
     }
+  }
+  setTimeout(type, 500);
 
-    musicBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleMusic();
+  // 雪花
+  const canvas = document.getElementById("snowCanvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  const flakes = [];
+  for (let i=0;i<80;i++) flakes.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*3+1, d:Math.random()*1+0.5});
+  function drawSnow() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = "rgba(200,180,220,0.7)";
+    ctx.beginPath();
+    flakes.forEach(f => {
+      ctx.moveTo(f.x,f.y); ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
+      f.y += f.d; f.x += Math.sin(f.y*0.01)*0.5;
+      if (f.y > canvas.height) { f.y = -10; f.x = Math.random()*canvas.width; }
     });
+    ctx.fill(); requestAnimationFrame(drawSnow);
+  }
+  drawSnow();
+  window.addEventListener("resize", () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
 
-    document.body.addEventListener('click', () => {
-      if (!musicOn) toggleMusic();
-    }, { once: true });
+  // 弹窗
+  function showModal(id) { document.getElementById(id).style.display = "flex"; }
+  function hideModal(id) { document.getElementById(id).style.display = "none"; }
+  function closeOnOverlay(e, id) { if (e.target === document.getElementById(id)) hideModal(id); }
+  function showPhoto(src) { document.getElementById("bigPhoto").src = src; showModal("photoModal"); }
 
-    /* ================= 蝙蝠飞行 ================= */
-    const batBtn = document.getElementById('batBtn');
-    const batContainer = document.getElementById('batContainer');
+  // 标签/列表
+  const tagInfo = {
+    '读书': { title:'📖 读书', content:'暗黑文学+治愈散文，最近在看哥特小说。' },
+    '听歌': { title:'🎵 听歌', content:'音乐、后摇、lo-fi，循环这首背景乐。' },
+    '看电影': { title:'🎬 看电影', content:'蒂姆·波顿的暗黑童话，百看不厌。' },
+    '散步': { title:'🚶 散步', content:'夜里散步，看路灯和影子。' },
+    '折腾': { title:'🛠️ 折腾', content:'这个网站就是产物，边学边改。' },
+    '发呆': { title:'😴 发呆', content:'发呆是暗黑系必修课。' }
+  };
+  function showTag(n) { document.getElementById('tagTitle').textContent=tagInfo[n].title; document.getElementById('tagContent').textContent=tagInfo[n].content; showModal('tagModal'); }
+  const itemInfo = {
+    'reading':{title:'📖 在读',content:'一本哥特风小说，氛围感拉满。'},
+    'music':{title:'🎵 单曲循环',content:'就是背景这首音乐，很配雪花。'},
+    'web':{title:'🛠️ 网页',content:'从零开始，加了雪花、弹窗、照片墙。'},
+    'coffee':{title:'☕ 咖啡',content:'手冲翻车中，但暗黑氛围到位。'}
+  };
+  function showItem(k) { document.getElementById('itemTitle').textContent=itemInfo[k].title; document.getElementById('itemContent').textContent=itemInfo[k].content; showModal('itemModal'); }
 
-    batBtn.addEventListener('click', () => {
-      batContainer.classList.remove('fly');
-      void batContainer.offsetWidth; // 重置动画
-      batContainer.classList.add('fly');
-    });
+  // 头像
+  function avatarClick() { const a=document.querySelector('.avatar'); a.classList.add('bounce'); setTimeout(()=>a.classList.remove('bounce'),500); }
 
-    /* ================= 骷髅语录 ================= */
-    const quotes = [
-      "代码写不出来？没关系，蝙蝠也经常撞墙。🦇",
-      "暗黑不代表阴暗，朋克不代表叛逆——可爱才是真理。✨",
-      "每个程序员心里都住着一只小蝙蝠，白天睡觉晚上debug。🌙",
-      "不要怕黑，因为黑暗里才有最亮的星星。⭐",
-      "朋克精神就是：规则是给别人看的，我的主页我说了算。🎸",
-      "可爱和暗黑并不矛盾，就像蝙蝠侠也会养蝙蝠当宠物。🦇🐱",
-      "生活太苦？加点哥特风滤镜，瞬间变高级。🖤",
-      "你问我为什么喜欢暗黑风？因为亮色太费电了。💡",
-      "真正的朋克是：用最暗的主题写最可爱的代码。💜",
-      "蝙蝠飞过的地方，星星都会多眨一下眼。✨🦇"
-    ];
+// 右下角音乐按钮（🦇🚫 ↔ 🦇）
+  const bgMusic = document.getElementById('bgMusic');
+  const musicBtn = document.getElementById('musicBtn');
+  let musicOn = false;
 
-    const skullBtn = document.getElementById('skullBtn');
-    const quoteOverlay = document.getElementById('quoteOverlay');
-    const quoteText = document.getElementById('quoteText');
-
-    skullBtn.addEventListener('click', () => {
-      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-      quoteText.textContent = randomQuote;
-      quoteOverlay.classList.add('show');
-    });
-
-    function closeQuote() {
-      quoteOverlay.classList.remove('show');
-    }
-
-    /* ================= 惊喜按钮 ================= */
-    const sparkleBtn = document.getElementById('sparkleBtn');
-    sparkleBtn.addEventListener('click', () => {
-      // 随机变色标题
-      const h1 = document.querySelector('h1');
-      const colors = ['#c9a0dc', '#ff6b9d', '#a0e8e0', '#f8c630', '#ff4444', '#88d8ff'];
-      h1.style.color = colors[Math.floor(Math.random() * colors.length)];
-      h1.style.transform = 'scale(1.05)';
-      setTimeout(() => { h1.style.transform = 'scale(1)'; }, 300);
-
-      // 弹几个星星
-      for (let i = 0; i < 5; i++) {
-        setTimeout(() => {
-          const star = document.createElement('div');
-          star.className = 'star-trail';
-          star.textContent = ['⭐', '✨', '💫', '🌟'][Math.floor(Math.random() * 4)];
-          star.style.left = (Math.random() * window.innerWidth) + 'px';
-          star.style.top = (Math.random() * window.innerHeight * 0.5) + 'px';
-          document.body.appendChild(star);
-          setTimeout(() => star.remove(), 800);
-        }, i * 100);
-      }
-    });
-
-    /* ================= 彩蛋 ================= */
-    const eggBtn = document.getElementById('eggBtn');
-    eggBtn.addEventListener('click', () => {
-      // 所有文字抖动
-      document.querySelectorAll('.card, h1, .subtitle').forEach(el => {
-        el.style.animation = 'none';
-        el.offsetHeight;
-        el.style.animation = 'shake 0.5s ease';
+  musicBtn.addEventListener('click', () => {
+    if (!musicOn) {
+      bgMusic.volume = 0.4;
+      bgMusic.play().then(() => {
+        musicOn = true;
+        musicBtn.textContent = '🦇';
+      }).catch(() => {
+        alert('浏览器拦了，再点一次试试');
       });
-
-      // 加抖动动画
-      if (!document.getElementById('shakeStyle')) {
-        const style = document.createElement('style');
-        style.id = 'shakeStyle';
-        style.textContent = `
-          @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px) rotate(-1deg); }
-            75% { transform: translateX(5px) rotate(1deg); }
-          }
-        `;
-        document.head.appendChild(style);
-      }
-
-      alert('🥚 彩蛋触发！你发现了隐藏的抖动魔法 ✨\n\n提示：试试在键盘上敲 "bat" 三个字母...');
-    });
-
-    // 键盘彩蛋：输入 "bat"
-    let keyBuffer = '';
-    document.addEventListener('keydown', (e) => {
-      keyBuffer += e.key.toLowerCase();
-      if (keyBuffer.length > 5) keyBuffer = keyBuffer.slice(-5);
-      if (keyBuffer.includes('bat')) {
-        keyBuffer = '';
-        batContainer.classList.remove('fly');
-        void batContainer.offsetWidth;
-        batContainer.classList.add('fly');
-        // 额外惊喜
-        document.body.style.filter = 'hue-rotate(90deg)';
-        setTimeout(() => { document.body.style.filter = ''; }, 1000);
-      }
-    });
-
-    /* ================= 主题切换 ================= */
-    const themeBtn = document.getElementById('themeBtn');
-    let themeCount = 0;
-    const themes = [
-      { bg: '#0a0a0f', text: '#d4d4d4', name: '暗黑' },
-      { bg: '#1a1a2e', text: '#e8d5f5', name: '紫夜' },
-      { bg: '#0d1b2a', text: '#b0c4de', name: '深蓝' },
-      { bg: '#1b0a1f', text: '#f8c8dc', name: '暗粉' }
-    ];
-
-    themeBtn.addEventListener('click', () => {
-      themeCount = (themeCount + 1) % themes.length;
-      const t = themes[themeCount];
-      document.body.style.background = t.bg;
-      document.body.style.color = t.text;
-      themeBtn.textContent = ['🎃', '🌙', '🌊', '🌸'][themeCount];
-    });
-
-    /* ================= 鼠标星星尾巴 ================= */
-    let mouseTimer;
-    document.addEventListener('mousemove', (e) => {
-      clearTimeout(mouseTimer);
-      mouseTimer = setTimeout(() => {
-        if (Math.random() > 0.7) {
-          const star = document.createElement('div');
-          star.className = 'star-trail';
-          star.textContent = ['✨', '⭐', '💫'][Math.floor(Math.random() * 3)];
-          star.style.left = e.pageX + 'px';
-          star.style.top = e.pageY + 'px';
-          document.body.appendChild(star);
-          setTimeout(() => star.remove(), 800);
-        }
-      }, 50);
-    });
-
-    /* ================= 雪花效果 ================= */
-    const canvas = document.getElementById('snowCanvas');
-    const ctx = canvas.getContext('2d');
-    let width, height, snowflakes = [];
-
-    function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+    } else {
+      bgMusic.pause();
+      musicOn = false;
+      musicBtn.textContent = '🦇🚫';
     }
-    window.addEventListener('resize', resize);
-    resize();
+  });
 
-    class Snowflake {
-      constructor() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height - height;
-        this.r = Math.random() * 2 + 0.5;
-        this.d = Math.random() + 0.5;
-        this.opacity = Math.random() * 0.5 + 0.3;
-      }
-      update() {
-        this.y += Math.pow(this.d, 2) + 0.5;
-        this.x += Math.sin(this.y * 0.01) * 0.3;
-        if (this.y > height) {
-          this.y = -10;
-          this.x = Math.random() * width;
-        }
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.fillStyle = "rgba(200,200,220," + this.opacity + ")";
-        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
+  // 主题切换（微调明暗）
+  let dark=true;
+  function toggleTheme() {
+    dark=!dark;
+    if(dark){ document.documentElement.removeAttribute('data-theme'); document.querySelector('[data-theme]')?.removeAttribute('data-theme'); }
+    else { document.documentElement.setAttribute('data-theme','light'); }
+  }
 
-    for (let i = 0; i < 150; i++) {
-      snowflakes.push(new Snowflake());
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, width, height);
-      snowflakes.forEach(f => { f.update(); f.draw(); });
-      requestAnimationFrame(animate);
-    }
-    animate();
-  </script>
+  // ESC
+  document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.modal-overlay').forEach(m=>m.style.display='none'); });
+</script>
 </body>
 </html>
